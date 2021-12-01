@@ -1,0 +1,10 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "target": "ES5",
+        "rootDir": "../",
+        "baseUrl": "../src",
+    },
+    "include": ["../src", "../test"]
+}

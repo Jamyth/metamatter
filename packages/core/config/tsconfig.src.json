@@ -1,0 +1,19 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "target": "ES5",
+
+        "declaration": true,
+        "sourceMap": true,
+        "inlineSources": true,
+        "declarationMap": true,
+
+        "rootDir": "../src",
+        "outDir": "../dist",
+
+        "importsNotUsedAsValues": "preserve",
+        "isolatedModules": true
+    },
+    "include": ["../src"]
+}
