@@ -10,5 +10,10 @@
         "build": "yarn run-script script/build.ts",
         "test": "TS_NODE_PROJECT='./config/tsconfig.test.json' mocha --require ts-node/register ./test/**/*.test.ts"
     },
-    "files": ["dist/**"]
+    "files": [
+        "dist/**"
+    ],
+    "dependencies": {
+        "reflect-metadata": "0.1.13"
+    }
 }

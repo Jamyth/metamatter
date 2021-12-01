@@ -12,6 +12,10 @@
         "rootDir": "../src",
         "outDir": "../dist",
 
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "strictPropertyInitialization": false,
+
         "importsNotUsedAsValues": "preserve",
         "isolatedModules": true
     },

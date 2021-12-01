@@ -1,0 +1,1 @@
+{"version":3,"file":"createMetadataKey.js","sourceRoot":"","sources":["../../src/util/createMetadataKey.ts"],"names":[],"mappings":";;;AAAA,SAAgB,iBAAiB,CAAC,GAAW;IACzC,OAAO,mBAAY,GAAG,CAAE,CAAC;AAC7B,CAAC;AAFD,8CAEC","sourcesContent":["export function createMetadataKey(key: string) {\n    return `@@IAMYTH/${key}`;\n}\n"]}

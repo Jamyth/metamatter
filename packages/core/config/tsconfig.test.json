@@ -5,6 +5,10 @@
         "target": "ES5",
         "rootDir": "../",
         "baseUrl": "../src",
+
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "strictPropertyInitialization": false
     },
     "include": ["../src", "../test"]
 }

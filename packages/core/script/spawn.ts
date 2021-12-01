@@ -4,7 +4,7 @@ import { createConsoleLogger } from '@iamyth/logger';
 const logger = createConsoleLogger('System');
 export const spawn = (command: string, args: string[], errorMessage: string) => {
     const isWindow = process.platform === 'win32';
-    const result = spawnSync(isWindow ? command + '.cmd' : command, args);
+    const result = spawnSync(isWindow ? command + '.cmd' : command, args, { stdio: 'inherit' });
     if (result.error) {
         logger.error(errorMessage);
         logger.error(result.error);
