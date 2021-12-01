@@ -15,5 +15,25 @@
     ],
     "dependencies": {
         "reflect-metadata": "0.1.13"
-    }
+    },
+    "contributors": [
+        {
+            "name": "Jamyth Luk",
+            "email": "jamyth0712@gmail.com",
+            "url": "https://github.com/Jamyth"
+        },
+        {
+            "name": "David",
+            "url": "https://github.com/uay13211"
+        },
+        {
+            "name": "Alvis",
+            "email": "alvistse123@gmail.com",
+            "url": "https://github.com/Shad02w"
+        },
+        {
+            "name": "Anthony",
+            "url": "https://github.com/anthonylee1994"
+        }
+    ]
 }
