@@ -1,6 +1,6 @@
 {
     "name": "@metamatter/core",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "main": "dist/index.js",
     "license": "MIT",
     "scripts": {
@@ -15,6 +15,11 @@
     ],
     "dependencies": {
         "reflect-metadata": "0.1.13"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Jamyth/metamatter",
+        "directory": "packages/core"
     },
     "contributors": [
         {

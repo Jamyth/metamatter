@@ -6,7 +6,6 @@ export class TypeBuilder<T = object> {
     private isNullable: boolean;
     private isEnum: boolean;
     private isSubclass: boolean;
-    private prefix: string | null;
     private type: string | null;
     private body: { [P in keyof T]: Type<T[P]> } | null;
 
@@ -15,7 +14,6 @@ export class TypeBuilder<T = object> {
         this.isNullable = false;
         this.isEnum = false;
         this.isSubclass = false;
-        this.prefix = null;
         this.body = null;
         this.type = null;
     }
@@ -31,9 +29,8 @@ export class TypeBuilder<T = object> {
         return this;
     };
 
-    setIsSubclass = (isSubclass: boolean, prefix: string | null) => {
+    setIsSubclass = (isSubclass: boolean) => {
         this.isSubclass = isSubclass;
-        this.prefix = prefix;
         return this;
     };
 
@@ -68,36 +65,37 @@ export class TypeBuilder<T = object> {
             isEnum: this.isEnum,
             isNullable: this.isNullable,
             isSubclass: this.isSubclass,
-            prefix: this.prefix,
             body: this.body,
             toString: this.toString,
             toDefinition: this.toDefinition,
         };
     };
 
-    toString = () => {
+    toString = (_prefix?: string) => {
         if (!this.type) {
             throw new Error('Type is not defined...');
         }
 
-        const prefix = this.isSubclass && this.prefix ? `${this.prefix}$` : '';
+        const prefix = this.isSubclass && _prefix ? `${_prefix}$` : '';
         const arrayText = this.isArray ? '[]' : '';
         const nullableText = this.isNullable ? ' | null' : '';
 
-        return prefix + this.type + arrayText + nullableText;
+        return prefix + this.type + arrayText + nullableText + ';';
     };
 
-    toDefinition = () => {
+    toDefinition = (prefix?: string) => {
         if (!this.body) {
             throw new Error('body is not defined');
         }
 
         if (this.isEnum) {
-            return JSON.stringify(this.body);
+            const keys = Object.keys(this.body);
+            const value = keys.map((_) => `${_} = "${_}",`);
+            return `{${value.join('')}}`;
         }
 
         const fields = Object.entries(this.body).reduce((acc, [key, property]: any) => {
-            return Object.assign(acc, { [key]: property.toString() });
+            return Object.assign(acc, { [key]: property.toString(prefix) });
         }, {});
         return JSON.stringify(fields);
     };

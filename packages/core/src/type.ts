@@ -9,10 +9,9 @@ export interface Type<T> {
     isEnum: boolean;
     isNullable: boolean;
     isSubclass: boolean;
-    prefix: string | null;
     body: T extends object ? (object extends T ? T : { [P in keyof T]: Type<ExcludeArray<T[P]>> }) : null;
-    toString: () => string;
-    toDefinition: () => string;
+    toString: (prefix?: string) => string;
+    toDefinition: (prefix?: string) => string;
 }
 
 export type PropertyTree<T> = Type<T>['body'];

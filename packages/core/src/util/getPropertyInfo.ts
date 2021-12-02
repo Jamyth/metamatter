@@ -7,19 +7,18 @@ interface PropertyInfo<T extends EnumType<T>> {
     isEnum: boolean;
     isNullable: boolean;
     isSubclass: boolean;
-    prefix: string | null;
     body: T | null;
 }
 
 export function getPropertyInfo<T extends EnumType<T>>(
     object: Constructor | null,
-    { isArray, isEnum, isNullable, isSubclass, body, prefix }: PropertyInfo<T>,
+    { isArray, isEnum, isNullable, isSubclass, body }: PropertyInfo<T>,
 ) {
     const builder = new TypeBuilder();
     builder.setIsArray(isArray);
     builder.setIsNullable(isNullable);
     builder.setIsEnum(isEnum);
-    builder.setIsSubclass(isSubclass, prefix);
+    builder.setIsSubclass(isSubclass);
 
     if (object !== null) {
         switch (object) {

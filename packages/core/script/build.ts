@@ -8,6 +8,8 @@ require('./format');
 require('./lint');
 
 function build() {
+    logger.task('Running Test');
+    spawn('yarn', ['test'], 'Test Failed.');
     logger.task('Build and Transpile');
     spawn('tsc', ['--project', path.join(__dirname, '../config/tsconfig.src.json')], 'Build Failed.');
 }

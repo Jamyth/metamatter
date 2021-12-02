@@ -6,13 +6,21 @@ import type { Constructor, EnumType, Type } from '../type';
 
 export const PROPERTY_KEY = createMetadataKey('PROPERTY');
 
-export interface PropertyOption {
+interface Option {
     nullable?: boolean;
     isArray?: boolean;
     type?: Constructor;
 }
 
-const defaultOptions: PropertyOption = {
+export type PropertyOption = Pick<Option, 'nullable'>;
+
+export interface ArrayPropertyOption {
+    nullable?: boolean;
+    isArray: boolean;
+    type: Constructor;
+}
+
+const defaultOptions: Option = {
     nullable: false,
     isArray: false,
 };
@@ -23,8 +31,9 @@ const defaultOptions: PropertyOption = {
  * `Enum`, `Promise`, `Array` should explicitly provide in `options` parameter
  *
  * Nullable should consider `empty` instead of `null`
+ * Nullable field should not have union type of null, e.g. 'string | null'
  *
- * @param {PropertyOption} options -- Provide external information of current property
+ * @param {Option} options -- Provide external information of current property
  *
  * @example
  * class UserView {
@@ -38,11 +47,13 @@ const defaultOptions: PropertyOption = {
  *     phone?: string
  * }
  */
+export function Property<Enum extends EnumType<Enum>>(options?: ArrayPropertyOption): PropertyDecorator;
+export function Property<Enum extends EnumType<Enum>>(options?: PropertyOption): PropertyDecorator;
 export function Property<Enum extends EnumType<Enum>>({
     type,
     isArray = false,
     nullable = false,
-}: PropertyOption = defaultOptions): PropertyDecorator {
+}: Option = defaultOptions): PropertyDecorator {
     return (target, key) => {
         const serializedKey = String(key);
 
@@ -50,7 +61,7 @@ export function Property<Enum extends EnumType<Enum>>({
 
         const inferredType: Constructor = type ? type : Reflect.getMetadata('design:type', target, key);
 
-        if (typeof inferredType === undefined) {
+        if (typeof inferredType === 'undefined') {
             console.warn(`Type of ${serializedKey} is inferred as "undefined", make sure it is correct.`);
         }
 
@@ -71,7 +82,6 @@ export function Property<Enum extends EnumType<Enum>>({
             isNullable: nullable,
             isEnum,
             body,
-            prefix: isSubclass ? target.constructor.name : null,
         });
 
         Reflect.defineMetadata(PROPERTY_KEY, propertyMap, target.constructor);
