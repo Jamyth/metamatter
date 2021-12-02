@@ -40,5 +40,13 @@
             "name": "Anthony",
             "url": "https://github.com/anthonylee1994"
         }
+    ],
+    "keywords": [
+        "reflection",
+        "typescript",
+        "reflect-metadata",
+        "api",
+        "type definition",
+        "type gen"
     ]
 }
