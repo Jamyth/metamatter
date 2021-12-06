@@ -19,7 +19,7 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/Jamyth/metamatter",
-        "directory": "packages/core"
+        "directory": "packages/nest"
     },
     "contributors": [
         {
@@ -37,6 +37,6 @@
         "type definition"
     ],
     "dependencies": {
-        "@metamatter/core": "1.1.0"
+        "@metamatter/core": "1.1.5"
     }
 }
