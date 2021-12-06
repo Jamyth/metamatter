@@ -8,7 +8,6 @@ export const PROPERTY_KEY = createMetadataKey('PROPERTY');
 
 interface Option {
     nullable?: boolean;
-    isArray?: boolean;
     type?: Constructor;
 }
 
@@ -16,14 +15,14 @@ export type PropertyOption = Pick<Option, 'nullable'>;
 
 export interface ArrayPropertyOption {
     nullable?: boolean;
-    isArray: boolean;
     type: Constructor;
 }
 
 const defaultOptions: Option = {
     nullable: false,
-    isArray: false,
 };
+
+const UNRESOLVABLE_TYPES = ['Array', 'Promise'];
 
 /**
  * attention:
@@ -51,7 +50,6 @@ export function Property<Enum extends EnumType<Enum>>(options?: ArrayPropertyOpt
 export function Property<Enum extends EnumType<Enum>>(options?: PropertyOption): PropertyDecorator;
 export function Property<Enum extends EnumType<Enum>>({
     type,
-    isArray = false,
     nullable = false,
 }: Option = defaultOptions): PropertyDecorator {
     return (target, key) => {
@@ -59,14 +57,26 @@ export function Property<Enum extends EnumType<Enum>>({
 
         const propertyMap: Record<string, Type<any>> = Reflect.getMetadata(PROPERTY_KEY, target.constructor) || {};
 
-        const inferredType: Constructor = type ? type : Reflect.getMetadata('design:type', target, key);
+        let inferredType: Constructor = Reflect.getMetadata('design:type', target, key);
+
+        const isArray = inferredType.name === 'Array';
+        const isEnum = Reflect.getMetadata(ENUM_KEY, inferredType) || false;
+        const isSubclass = Reflect.getMetadata(SUBCLASS_KEY, inferredType) || false;
 
         if (typeof inferredType === 'undefined') {
             console.warn(`Type of ${serializedKey} is inferred as "undefined", make sure it is correct.`);
         }
 
-        const isEnum = Reflect.getMetadata(ENUM_KEY, inferredType) || false;
-        const isSubclass = Reflect.getMetadata(SUBCLASS_KEY, inferredType) || false;
+        UNRESOLVABLE_TYPES.forEach((name) => {
+            if (inferredType.name === name && !type) {
+                throw new Error(`Type of ${serializedKey} is inferred as "${name}", but type is not provided.`);
+            }
+        });
+
+        if (type) {
+            inferredType = type;
+        }
+
         let body: Enum | null = null;
 
         if (isEnum) {

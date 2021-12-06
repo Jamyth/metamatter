@@ -20,9 +20,36 @@ describe('@Property', () => {
         assert.deepEqual(userType.definition, expected);
     });
 
+    it('Throws Error if type is not provided for Array and Promise', () => {
+        const testArray = () => {
+            class Test {
+                @Property()
+                arrayField: string[];
+            }
+        };
+        const testPromise = () => {
+            class Test {
+                @Property()
+                promiseField: Promise<number>;
+            }
+        };
+        assert.throws(testArray, (error) => {
+            if (error instanceof Error) {
+                return error.message === 'Type of arrayField is inferred as "Array", but type is not provided.';
+            }
+            return false;
+        });
+        assert.throws(testPromise, (error) => {
+            if (error instanceof Error) {
+                return error.message === 'Type of promiseField is inferred as "Promise", but type is not provided.';
+            }
+            return false;
+        });
+    });
+
     it('Array types', () => {
         class NameList {
-            @Property({ isArray: true, type: String })
+            @Property({ type: String })
             names: string[];
         }
         const nameListType = MetaMatter.generateTypeDefinitions(NameList)[0];
@@ -45,7 +72,7 @@ describe('@Property', () => {
 
     it('Nullable Array Types', () => {
         class User {
-            @Property({ nullable: true, isArray: true, type: Number })
+            @Property({ nullable: true, type: Number })
             bankAccounts?: number[];
         }
         const userType = MetaMatter.generateTypeDefinitions(User)[0];
@@ -144,7 +171,7 @@ describe('MetaMatter', () => {
         @Property()
         age: number;
 
-        @Property({ isArray: true, type: Bank })
+        @Property({ type: Bank })
         bankAccounts: Bank[];
 
         @Property()

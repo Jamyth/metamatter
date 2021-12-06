@@ -56,7 +56,7 @@ class User {
     @Property()
     username: string;
 
-    @Property({ isArray: true, type: String })
+    @Property({ type: String })
     hobbies: string[];
 
     @Property({ nullable: true })
