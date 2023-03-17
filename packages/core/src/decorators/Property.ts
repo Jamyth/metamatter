@@ -1,17 +1,17 @@
-import { createMetadataKey } from '../util/createMetadataKey';
-import { getPropertyInfo } from '../util/getPropertyInfo';
-import { ENUM_KEY } from './Enum';
-import { SUBCLASS_KEY } from './Subclass';
-import type { Constructor, EnumType, Type } from '../type';
+import { createMetadataKey } from "../util/createMetadataKey";
+import { getPropertyInfo } from "../util/getPropertyInfo";
+import { ENUM_KEY } from "./Enum";
+import { SUBCLASS_KEY } from "./Subclass";
+import type { Constructor, EnumType, Type } from "../type";
 
-export const PROPERTY_KEY = createMetadataKey('PROPERTY');
+export const PROPERTY_KEY = createMetadataKey("PROPERTY");
 
 interface Option {
     nullable?: boolean;
     type?: Constructor;
 }
 
-export type PropertyOption = Pick<Option, 'nullable'>;
+export type PropertyOption = Pick<Option, "nullable">;
 
 export interface ArrayPropertyOption {
     nullable?: boolean;
@@ -22,7 +22,30 @@ const defaultOptions: Option = {
     nullable: false,
 };
 
-const UNRESOLVABLE_TYPES = ['Array', 'Promise'];
+function extractPropertyOfType(inferred: Constructor) {
+    const isArray = inferred.name === "Array";
+    const isEnum = Reflect.getMetadata(ENUM_KEY, inferred) || false;
+    const isSubclass = Reflect.getMetadata(SUBCLASS_KEY, inferred) || false;
+
+    return {
+        isArray,
+        isEnum,
+        isSubclass,
+    };
+}
+
+function assertConcreteTypeProvided(
+    serializedKey: string,
+    inferred: Constructor,
+    provided: Constructor<any> | undefined,
+) {
+    const UNRESOLVABLE_TYPES = [Array.name, Promise.name];
+    return UNRESOLVABLE_TYPES.forEach((name) => {
+        if (inferred.name === name && !provided) {
+            throw new Error(`Type of ${serializedKey} is inferred as "${name}", but type is not provided.`);
+        }
+    });
+}
 
 /**
  * attention:
@@ -57,21 +80,15 @@ export function Property<Enum extends EnumType<Enum>>({
 
         const propertyMap: Record<string, Type<any>> = Reflect.getMetadata(PROPERTY_KEY, target.constructor) || {};
 
-        let inferredType: Constructor = Reflect.getMetadata('design:type', target, key);
+        let inferredType: Constructor = Reflect.getMetadata("design:type", target, key);
 
-        const isArray = inferredType.name === 'Array';
-        const isEnum = Reflect.getMetadata(ENUM_KEY, inferredType) || false;
-        const isSubclass = Reflect.getMetadata(SUBCLASS_KEY, inferredType) || false;
+        const { isArray, isEnum, isSubclass } = extractPropertyOfType(inferredType);
 
-        if (typeof inferredType === 'undefined') {
+        if (typeof inferredType === "undefined") {
             console.warn(`Type of ${serializedKey} is inferred as "undefined", make sure it is correct.`);
         }
 
-        UNRESOLVABLE_TYPES.forEach((name) => {
-            if (inferredType.name === name && !type) {
-                throw new Error(`Type of ${serializedKey} is inferred as "${name}", but type is not provided.`);
-            }
-        });
+        assertConcreteTypeProvided(serializedKey, inferredType, type);
 
         if (type) {
             inferredType = type;

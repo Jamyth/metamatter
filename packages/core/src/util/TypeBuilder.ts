@@ -1,4 +1,4 @@
-import type { Type } from '../type';
+import type { Type } from "../type";
 
 export class TypeBuilder<T = object> {
     private isPrimitive: boolean;
@@ -51,7 +51,7 @@ export class TypeBuilder<T = object> {
 
     build = (): Type<any> => {
         if (!this.type) {
-            throw new Error('Type is not defined...');
+            throw new Error("Type is not defined...");
         }
 
         if (!this.isPrimitive && !this.body) {
@@ -73,25 +73,25 @@ export class TypeBuilder<T = object> {
 
     toString = (_prefix?: string) => {
         if (!this.type) {
-            throw new Error('Type is not defined...');
+            throw new Error("Type is not defined...");
         }
 
-        const prefix = this.isSubclass && _prefix ? `${_prefix}$` : '';
-        const arrayText = this.isArray ? '[]' : '';
-        const nullableText = this.isNullable ? ' | null' : '';
+        const prefix = this.isSubclass && _prefix ? `${_prefix}$` : "";
+        const arrayText = this.isArray ? "[]" : "";
+        const nullableText = this.isNullable ? " | null" : "";
 
-        return prefix + this.type + arrayText + nullableText + ';';
+        return prefix + this.type + arrayText + nullableText + ";";
     };
 
     toDefinition = (prefix?: string) => {
         if (!this.body) {
-            throw new Error('body is not defined');
+            throw new Error("body is not defined");
         }
 
         if (this.isEnum) {
             const keys = Object.keys(this.body);
             const value = keys.map((_) => `${_} = "${_}",`);
-            return `{${value.join('')}}`;
+            return `{${value.join("")}}`;
         }
 
         const fields = Object.entries(this.body).reduce((acc, [key, property]: any) => {
@@ -101,7 +101,7 @@ export class TypeBuilder<T = object> {
     };
 
     private isPrimitiveTypes = () => {
-        const primitives = ['string', 'number', 'boolean', 'Date', 'void'];
+        const primitives = ["string", "number", "boolean", "Date", "void"];
         return this.type ? primitives.includes(this.type) : false;
     };
 }

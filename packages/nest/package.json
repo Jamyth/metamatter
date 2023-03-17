@@ -2,19 +2,22 @@
     "name": "@metamatter/nest",
     "version": "1.0.0",
     "main": "dist/index.js",
+    "private": true,
     "license": "MIT",
     "scripts": {
         "run-script": "ts-node --project config/tsconfig.script.json",
         "format": "yarn run-script script/format.ts",
         "lint": "yarn run-script script/lint.ts",
         "build": "yarn run-script script/build.ts",
+        "dev": "ts-node --project config/tsconfig.src.json src/index.ts",
         "test": "TS_NODE_PROJECT='./config/tsconfig.test.json' mocha --require ts-node/register ./test/**/*.test.ts"
     },
     "files": [
         "dist/**"
     ],
     "peer-dependencies": {
-        "@metamatter/core": "*"
+        "@metamatter/core": "*",
+        "@nestjs/common": "*"
     },
     "repository": {
         "type": "git",
@@ -36,7 +39,13 @@
         "reflect-metadata",
         "type definition"
     ],
-    "dependencies": {
-        "@metamatter/core": "1.1.5"
+    "devDependencies": {
+        "@metamatter/core": "1.1.5",
+        "@nestjs/common": "9.3.10",
+        "mocha": "10.2.0",
+        "prettier": "2.8.4",
+        "rxjs": "7.8.0",
+        "ts-node": "10.9.1",
+        "typescript": "5.0.2"
     }
 }

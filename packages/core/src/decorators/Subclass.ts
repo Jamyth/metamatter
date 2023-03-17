@@ -1,7 +1,7 @@
-import { createMetadataKey } from '../util/createMetadataKey';
-import { ENUM_KEY } from './Enum';
+import { createMetadataKey } from "../util/createMetadataKey";
+import { ENUM_KEY } from "./Enum";
 
-export const SUBCLASS_KEY = createMetadataKey('SUBCLASS');
+export const SUBCLASS_KEY = createMetadataKey("SUBCLASS");
 
 /**
  * attention:

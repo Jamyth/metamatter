@@ -1,6 +1,6 @@
-import { TypeBuilder } from './util/TypeBuilder';
-import { ENUM_KEY, PROPERTY_KEY } from './decorators';
-import type { Constructor, PropertyTree, Type, Definition } from './type';
+import { TypeBuilder } from "./util/TypeBuilder";
+import { ENUM_KEY, PROPERTY_KEY } from "./decorators";
+import type { Constructor, PropertyTree, Type, Definition } from "./type";
 
 export class MetaMatter {
     static getPropertyTree<T>(object: Constructor<T>): PropertyTree<T> {
@@ -27,7 +27,7 @@ export class MetaMatter {
 
     private static createTypeDefinitionFromTree<T>(property: Type<T>, prefix?: string): Definition[] {
         const name = property.isSubclass && prefix ? `${prefix}$${property.type}` : property.type;
-        const definitionType = property.isEnum ? 'enum' : 'interface';
+        const definitionType = property.isEnum ? "enum" : "interface";
         const rawDefinition = property.toDefinition(name);
 
         const definition: Definition = {
@@ -63,7 +63,7 @@ export class MetaMatter {
 
         return {
             ...target,
-            definition: target.definition.replace(regex, ''),
+            definition: target.definition.replace(regex, ""),
         };
     }
 }

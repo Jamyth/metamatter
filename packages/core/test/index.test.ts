@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import { MetaMatter, Property, Enum, Subclass } from '../src';
+import { MetaMatter, Property, Enum, Subclass, PropertyTree } from '../src';
 
 describe('@Property', () => {
     class User {

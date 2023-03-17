@@ -1,6 +1,6 @@
-import { TypeBuilder } from './TypeBuilder';
-import { PROPERTY_KEY } from '../decorators/Property';
-import type { Constructor, EnumType, Type } from '../type';
+import { TypeBuilder } from "./TypeBuilder";
+import { PROPERTY_KEY } from "../decorators/Property";
+import type { Constructor, EnumType, Type } from "../type";
 
 interface PropertyInfo<T extends EnumType<T>> {
     isArray: boolean;
@@ -42,7 +42,7 @@ export function getPropertyInfo<T extends EnumType<T>>(
             }
         }
     } else {
-        builder.setType('void');
+        builder.setType("void");
     }
 
     return builder.build();

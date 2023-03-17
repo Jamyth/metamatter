@@ -1,3 +1,3 @@
-export * from './Enum';
-export * from './Property';
-export * from './Subclass';
+export * from "./Enum";
+export * from "./Property";
+export * from "./Subclass";

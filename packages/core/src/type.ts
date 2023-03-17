@@ -14,9 +14,9 @@ export interface Type<T> {
     toDefinition: (prefix?: string) => string;
 }
 
-export type PropertyTree<T> = Type<T>['body'];
+export type PropertyTree<T> = Type<T>["body"];
 export interface Definition {
     name: string;
-    type: 'interface' | 'enum';
+    type: "interface" | "enum";
     definition: string;
 }
