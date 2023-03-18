@@ -16,7 +16,7 @@
         "emitDecoratorMetadata": true,
         "strictPropertyInitialization": false,
 
-        "verbatimModuleSyntax": true,
+        "verbatimModuleSyntax": false,
         "isolatedModules": true
     },
     "include": ["../src"]
