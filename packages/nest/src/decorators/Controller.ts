@@ -16,9 +16,9 @@ export function Controller(prefixOrOptions?: string | string[] | ControllerOptio
         setup(target);
 
         if (prefixOrOptions !== undefined) {
-            NestController(prefixOrOptions as any);
+            NestController(prefixOrOptions as any)(target);
         } else {
-            NestController();
+            NestController()(target);
         }
     };
 }

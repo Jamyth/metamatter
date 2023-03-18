@@ -13,23 +13,28 @@ export class ApplicationInterfaceParser {
         this.serviceGenerator = new ServiceGenerator();
     }
 
-    generateService() {
+    generate() {
         const modules = this.extractAllModules();
         const controllers = this.extractAllControllers(modules);
 
         const services = controllers.map((controller) => this.serviceGenerator.generate(controller));
+        // TODO/Jamyth Refactor
+        const types = services.flatMap((service) =>
+            service.methods.flatMap((method) => {
+                const requestTypes = method.requestNode
+                    ? MetaMatter.generateTypeDefinitions(method.requestNode as any)
+                    : [];
+                const responseTypes = method.responseNode
+                    ? MetaMatter.generateTypeDefinitions(method.responseNode as any)
+                    : [];
 
-        console.info("modules", modules);
-        console.info("controllers", controllers);
+                return [...requestTypes, ...responseTypes];
+            }),
+        );
+
+        const uniqueTypes = Array.from(new Set(types.map((_) => JSON.stringify(_)))).map((_) => JSON.parse(_));
         console.info("services", JSON.stringify(services, null, 4));
-    }
-
-    generateTypes() {
-        const modules = this.extractAllModules();
-        const controllers = this.extractAllControllers(modules);
-
-        console.info("modules", modules);
-        console.info("controllers", controllers);
+        console.info("Type Definitions", uniqueTypes);
     }
 
     private extractAllModules() {
