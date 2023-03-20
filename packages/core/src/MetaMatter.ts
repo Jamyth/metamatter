@@ -1,5 +1,6 @@
 import { TypeBuilder } from "./util/TypeBuilder";
 import { ENUM_KEY, PROPERTY_KEY } from "./decorators";
+import { removeDuplicateTypes } from "./util/removeDuplicateTypes";
 import type { Constructor, PropertyTree, Type, Definition } from "./type";
 
 export class MetaMatter {
@@ -44,26 +45,9 @@ export class MetaMatter {
             ? Object.values(property.body).filter((_: Type<any>) => !_.isPrimitive)
             : [];
 
-        const stringifiedDefinitions = [
+        return removeDuplicateTypes(
             definition,
             ...children.flatMap((_) => MetaMatter.createTypeDefinitionFromTree(_, name)),
-        ].map((_) => JSON.stringify(_));
-        const stringifiedDefinitionSet = Array.from(new Set([...stringifiedDefinitions]));
-
-        return stringifiedDefinitionSet.map((_) => JSON.parse(_)).map(MetaMatter.sanitizeDefinition);
-    }
-
-    private static sanitizeDefinition(target: Definition): Definition {
-        const regex = /("|,)/g;
-        const enumRegex = /(=)/g;
-
-        if (enumRegex.test(target.definition)) {
-            return target;
-        }
-
-        return {
-            ...target,
-            definition: target.definition.replace(regex, ""),
-        };
+        );
     }
 }
