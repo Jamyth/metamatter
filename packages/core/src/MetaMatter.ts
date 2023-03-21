@@ -13,16 +13,17 @@ export class MetaMatter {
         const isEnum = Reflect.getMetadata(ENUM_KEY, object) || false;
         const prefix = object.name;
         const builder = new TypeBuilder();
-        builder.setType(prefix);
-        builder.setIsEnum(isEnum);
-        builder.setIsArray(false);
-        builder.setIsSubclass(false);
-        builder.setIsNullable(false);
-        builder.setBody(propertyMap);
-        return builder.build();
+        return builder
+            .setType(prefix)
+            .setIsEnum(isEnum)
+            .setIsArray(false)
+            .setIsSubclass(false)
+            .setIsNullable(false)
+            .setBody(propertyMap)
+            .build();
     }
 
-    static generateTypeDefinitions<T>(object: Constructor<T>) {
+    static generateTypeDefinitions<T>(object: Constructor<T>): Definition[] {
         return this.createTypeDefinitionFromTree(MetaMatter.getType(object));
     }
 
