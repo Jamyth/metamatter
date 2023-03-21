@@ -1,40 +1,40 @@
-import { MetaMatter } from "@metamatter/core";
 import { MODULE_KEY } from "./decorators/Module";
 import { CONTROLLER_KEY } from "./decorators/Controller";
-import { Generator } from "./ServiceGenerator/Generator";
+import { ServiceGeneratorBase } from "./ServiceGenerator/ServiceGeneratorBase";
 import { ServiceGenerator } from "./ServiceGenerator/ServiceGenerator";
+import { TypeGeneratorBase } from "./TypeGenerator/TypeGeneratorBase";
+import { TypeGenerator } from "./TypeGenerator/TypeGenerator";
+
+interface ParserConfig {
+    globalPrefix: string | undefined;
+}
+
+const defaultParserConfig: ParserConfig = {
+    globalPrefix: undefined,
+};
 
 export class ApplicationInterfaceParser {
     private entryModule: Function;
-    private serviceGenerator: Generator;
+    private serviceGenerator: ServiceGeneratorBase;
+    private typeGenerator: TypeGeneratorBase;
 
-    constructor(mainModule: Function) {
+    constructor(mainModule: Function, private readonly parserConfig: ParserConfig = defaultParserConfig) {
         this.entryModule = mainModule;
-        this.serviceGenerator = new ServiceGenerator();
+        this.serviceGenerator = new ServiceGenerator(parserConfig.globalPrefix);
+        this.typeGenerator = new TypeGenerator();
     }
 
     generate() {
         const modules = this.extractAllModules();
         const controllers = this.extractAllControllers(modules);
 
-        const services = controllers.map((controller) => this.serviceGenerator.generate(controller));
-        // TODO/Jamyth Refactor
-        const types = services.flatMap((service) =>
-            service.methods.flatMap((method) => {
-                const requestTypes = method.requestNode
-                    ? MetaMatter.generateTypeDefinitions(method.requestNode as any)
-                    : [];
-                const responseTypes = method.responseNode
-                    ? MetaMatter.generateTypeDefinitions(method.responseNode as any)
-                    : [];
+        const services = this.serviceGenerator.generate(controllers);
+        const types = this.typeGenerator.generate(controllers);
 
-                return [...requestTypes, ...responseTypes];
-            }),
-        );
-
-        const uniqueTypes = Array.from(new Set(types.map((_) => JSON.stringify(_)))).map((_) => JSON.parse(_));
-        console.info("services", JSON.stringify(services, null, 4));
-        console.info("Type Definitions", uniqueTypes);
+        return {
+            services,
+            types,
+        };
     }
 
     private extractAllModules() {

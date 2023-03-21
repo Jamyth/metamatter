@@ -4,6 +4,7 @@ export type RequestMethodType = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "A
 export interface ServiceMetadata {
     method: RequestMethod;
     path: string | string[];
+    isResponseArray: boolean;
     request: Function | null;
     response: Function | null;
 }
@@ -13,8 +14,6 @@ export interface ServiceFunctionInfo {
     path: string;
     request: string | null;
     response: string | null;
-    requestNode: Function | null;
-    responseNode: Function | null;
 }
 
 export interface Service {
@@ -22,6 +21,6 @@ export interface Service {
     methods: ServiceFunctionInfo[];
 }
 
-export abstract class Generator {
-    abstract generate(controller: Function): Service;
+export abstract class ServiceGeneratorBase {
+    abstract generate(controllers: Function[]): Service[];
 }

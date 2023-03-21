@@ -1,24 +1,38 @@
 import { RequestMethod } from "@nestjs/common";
-import { Generator, RequestMethodType, ServiceFunctionInfo, ServiceMetadata } from "./Generator";
+import {
+    ServiceGeneratorBase,
+    RequestMethodType,
+    Service,
+    ServiceFunctionInfo,
+    ServiceMetadata,
+} from "./ServiceGeneratorBase";
 import { REQUEST_BODY_KEY } from "../decorators/RequestBody";
-import { RESPONSE_DATA_KEY } from "../decorators/ResponseData";
+import { RESPONSE_DATA_KEY, RESPONSE_ARRAY_DATA_KEY } from "../decorators/ResponseData";
+import { ClassNameBuilder } from "../util/ClassNameBuilder";
 
 const METHOD_METADATA_KEY = "method";
 const PATH_METADATA_KEY = "path";
 
-export class ServiceGenerator implements Generator {
-    // TODO/Jamyth Refactor
-    generate(controller: Function) {
-        const controllerBasePath = Reflect.getMetadata(PATH_METADATA_KEY, controller);
-        const serviceFunctionInfos = this.extractFunctionKeys(controller)
-            .map((key) => this.extractFunctionMetadata(controller, key))
-            .filter((_): _ is ServiceMetadata => _ !== null)
-            .flatMap((metadata) => this.generateServiceFunctionInfo(metadata, controllerBasePath));
+export class ServiceGenerator implements ServiceGeneratorBase {
+    private globalPrefix: string;
 
-        return {
-            name: controller.name,
-            methods: serviceFunctionInfos,
-        };
+    constructor(globalPrefix: string | undefined) {
+        this.globalPrefix = globalPrefix || "";
+    }
+
+    generate(controllers: Function[]): Service[] {
+        return controllers.map((controller) => {
+            const controllerBasePath = Reflect.getMetadata(PATH_METADATA_KEY, controller);
+            const serviceFunctionInfos = this.extractFunctionKeys(controller)
+                .map((key) => this.extractFunctionMetadata(controller, key))
+                .filter((_): _ is ServiceMetadata => _ !== null)
+                .flatMap((metadata) => this.generateServiceFunctionInfo(metadata, controllerBasePath));
+
+            return {
+                name: controller.name,
+                methods: serviceFunctionInfos,
+            };
+        });
     }
 
     private extractFunctionKeys(controller: Function) {
@@ -47,13 +61,15 @@ export class ServiceGenerator implements Generator {
         const requestMethod: RequestMethod = Reflect.getMetadata(METHOD_METADATA_KEY, actualFn) ?? null;
         const requestPath: string | string[] = Reflect.getMetadata(PATH_METADATA_KEY, actualFn);
         const requestBody: Function | null = Reflect.getMetadata(REQUEST_BODY_KEY, actualFn) || null;
-        const responseData: Function = Reflect.getMetadata(RESPONSE_DATA_KEY, actualFn) || null;
+        const responseData: Function | null = Reflect.getMetadata(RESPONSE_DATA_KEY, actualFn) || null;
+        const isResponseArray: boolean = Reflect.getMetadata(RESPONSE_ARRAY_DATA_KEY, actualFn) || false;
 
         if (requestMethod === null) {
             return null;
         }
 
         return {
+            isResponseArray,
             method: requestMethod,
             path: requestPath,
             request: requestBody,
@@ -66,15 +82,19 @@ export class ServiceGenerator implements Generator {
 
         const paths = Array.isArray(path) ? path : [path];
 
-        return paths.map((path) => ({
-            path: this.joinPath(controllerBasePath, path),
-            method: this.requestMapper(config.method),
-            request: config.request?.name ?? null,
-            // TODO/Jamyth what if response is an array ?
-            response: config.response?.name ?? null,
-            requestNode: config?.request ?? null,
-            responseNode: config?.response ?? null,
-        }));
+        return paths.map((path) => {
+            const request = config.request ? new ClassNameBuilder(config.request).build() : null;
+            const response = config.response
+                ? new ClassNameBuilder(config.response).setIsArrayType(config.isResponseArray).build()
+                : null;
+
+            return {
+                path: this.joinPath(this.globalPrefix, controllerBasePath, path),
+                method: this.requestMapper(config.method),
+                request,
+                response,
+            };
+        });
     }
 
     private joinPath(...paths: string[]) {

@@ -1,7 +1,7 @@
-import { strict as assert } from 'assert';
-import { MetaMatter, Property, Enum, Subclass, PropertyTree } from '../src';
+import { strict as assert } from "assert";
+import { MetaMatter, Property, Enum, Subclass, PropertyTree, Type } from "../src";
 
-describe('@Property', () => {
+describe("@Property", () => {
     class User {
         @Property()
         name: string;
@@ -14,13 +14,13 @@ describe('@Property', () => {
 
     const userType = MetaMatter.generateTypeDefinitions(User)[0];
 
-    it('generate correct', () => {
-        const expected = '{name:string;age:number;}';
+    it("generate correct", () => {
+        const expected = "{name:string;age:number;}";
 
         assert.deepEqual(userType.definition, expected);
     });
 
-    it('Throws Error if type is not provided for Array and Promise', () => {
+    it("Throws Error if type is not provided for Array and Promise", () => {
         const testArray = () => {
             class Test {
                 @Property()
@@ -47,47 +47,47 @@ describe('@Property', () => {
         });
     });
 
-    it('Array types', () => {
+    it("Array types", () => {
         class NameList {
             @Property({ type: String })
             names: string[];
         }
         const nameListType = MetaMatter.generateTypeDefinitions(NameList)[0];
 
-        const expected = '{names:string[];}';
+        const expected = "{names:string[];}";
 
         assert.deepStrictEqual(nameListType.definition, expected);
     });
 
-    it('Nullable Types', () => {
+    it("Nullable Types", () => {
         class User {
             @Property({ nullable: true })
             phone?: number;
         }
         const userType = MetaMatter.generateTypeDefinitions(User)[0];
-        const expected = '{phone:number | null;}';
+        const expected = "{phone:number | null;}";
 
         assert.deepStrictEqual(userType.definition, expected);
     });
 
-    it('Nullable Array Types', () => {
+    it("Nullable Array Types", () => {
         class User {
             @Property({ nullable: true, type: Number })
             bankAccounts?: number[];
         }
         const userType = MetaMatter.generateTypeDefinitions(User)[0];
-        const expected = '{bankAccounts:number[] | null;}';
+        const expected = "{bankAccounts:number[] | null;}";
 
         assert.deepStrictEqual(userType.definition, expected);
     });
 
-    it('Field without @Property will not be exported', () => {
-        const expected = '{name:string;age:number;ignore:string;}';
+    it("Field without @Property will not be exported", () => {
+        const expected = "{name:string;age:number;ignore:string;}";
         assert.notDeepEqual(userType.definition, expected);
     });
 });
 
-describe('@Subclass', () => {
+describe("@Subclass", () => {
     class D {
         @Property()
         anything: string;
@@ -112,44 +112,44 @@ describe('@Subclass', () => {
 
     const definition = MetaMatter.generateTypeDefinitions(A);
 
-    it('First class marked with @Subclass will not have prefix', () => {
-        const name = 'A';
+    it("First class marked with @Subclass will not have prefix", () => {
+        const name = "A";
         const a = definition.find((_) => _.name === name);
         assert.deepEqual(!!a, true);
     });
 
-    it('Nested class will have deeply chained prefix', () => {
-        const names = ['A$B', 'A$B$C'];
+    it("Nested class will have deeply chained prefix", () => {
+        const names = ["A$B", "A$B$C"];
         const actual = names.every((_) => definition.map((_) => _.name).includes(_));
         assert.deepEqual(actual, true);
     });
 
-    it('Nested class without @Subclass will not be prefixed', () => {
-        const name = 'D';
+    it("Nested class without @Subclass will not be prefixed", () => {
+        const name = "D";
         const actual = definition.map((_) => _.name).includes(name);
         assert.deepEqual(actual, true);
     });
 });
 
-describe('@Enum', () => {
+describe("@Enum", () => {
     @Enum()
     class Role {
-        static readonly ADMIN = 'ADMIN';
-        static readonly USER = 'USER';
+        static readonly ADMIN = "ADMIN";
+        static readonly USER = "USER";
     }
 
     const definition = MetaMatter.generateTypeDefinitions(Role)[0];
 
     it('Create a definition of type "enum"', () => {
-        assert.deepStrictEqual(definition.type, 'enum');
+        assert.deepStrictEqual(definition.type, "enum");
     });
 });
 
-describe('MetaMatter', () => {
+describe("MetaMatter", () => {
     @Enum()
     class Status {
-        static readonly ENABLED = 'ENABLED';
-        static readonly DISABLED = 'DISABLED';
+        static readonly ENABLED = "ENABLED";
+        static readonly DISABLED = "DISABLED";
     }
 
     @Subclass()
@@ -180,7 +180,7 @@ describe('MetaMatter', () => {
 
     const definitions = MetaMatter.generateTypeDefinitions(User);
 
-    it('No duplicate types will be generated', () => {
+    it("No duplicate types will be generated", () => {
         const expected = 3;
         assert.deepStrictEqual(definitions.length, expected);
     });

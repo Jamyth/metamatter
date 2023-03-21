@@ -1,0 +1,2 @@
+export const APP_MODULE_KEY = "APP_MODULE";
+export const GLOBAL_PREFIX_KEY = "GLOBAL_PREFIX";
