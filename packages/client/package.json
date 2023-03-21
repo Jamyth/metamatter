@@ -1,0 +1,59 @@
+{
+    "name": "@metamatter/core",
+    "version": "1.1.7",
+    "main": "dist/index.js",
+    "license": "MIT",
+    "scripts": {
+        "run-script": "ts-node --project config/tsconfig.script.json",
+        "format": "yarn run-script script/format.ts",
+        "lint": "yarn run-script script/lint.ts",
+        "build": "yarn run-script script/build.ts",
+        "test": "TS_NODE_PROJECT='./config/tsconfig.test.json' mocha --require ts-node/register ./test/**/*.test.ts"
+    },
+    "files": [
+        "dist/**"
+    ],
+    "dependencies": {
+        "reflect-metadata": "0.1.13"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Jamyth/metamatter",
+        "directory": "packages/core"
+    },
+    "contributors": [
+        {
+            "name": "Jamyth Luk",
+            "email": "jamyth0712@gmail.com",
+            "url": "https://github.com/Jamyth"
+        },
+        {
+            "name": "David",
+            "url": "https://github.com/uay13211"
+        },
+        {
+            "name": "Alvis",
+            "email": "alvistse123@gmail.com",
+            "url": "https://github.com/Shad02w"
+        },
+        {
+            "name": "Anthony",
+            "url": "https://github.com/anthonylee1994"
+        }
+    ],
+    "keywords": [
+        "reflection",
+        "typescript",
+        "reflect-metadata",
+        "api",
+        "type definition",
+        "type gen"
+    ],
+    "devDependencies": {
+        "eslint": "8.36.0",
+        "mocha": "10.2.0",
+        "prettier": "2.8.4",
+        "ts-node": "10.9.1",
+        "typescript": "5.0.2"
+    }
+}
