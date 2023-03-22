@@ -5,7 +5,7 @@ import path from "path";
 const logger = createConsoleLogger("TypeScript Compiler");
 
 require("./format");
-// require('./lint');
+require("./lint");
 
 function build() {
     logger.task("Running Test");

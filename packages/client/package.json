@@ -1,6 +1,6 @@
 {
-    "name": "@metamatter/core",
-    "version": "1.1.7",
+    "name": "@metamatter/client",
+    "version": "1.0.0",
     "main": "dist/index.js",
     "license": "MIT",
     "scripts": {
@@ -13,9 +13,6 @@
     "files": [
         "dist/**"
     ],
-    "dependencies": {
-        "reflect-metadata": "0.1.13"
-    },
     "repository": {
         "type": "git",
         "url": "https://github.com/Jamyth/metamatter",
@@ -26,19 +23,6 @@
             "name": "Jamyth Luk",
             "email": "jamyth0712@gmail.com",
             "url": "https://github.com/Jamyth"
-        },
-        {
-            "name": "David",
-            "url": "https://github.com/uay13211"
-        },
-        {
-            "name": "Alvis",
-            "email": "alvistse123@gmail.com",
-            "url": "https://github.com/Shad02w"
-        },
-        {
-            "name": "Anthony",
-            "url": "https://github.com/anthonylee1994"
         }
     ],
     "keywords": [

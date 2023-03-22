@@ -1,8 +1,8 @@
 import { MODULE_KEY } from "./decorators/Module";
 import { CONTROLLER_KEY } from "./decorators/Controller";
-import { ServiceGeneratorBase } from "./ServiceGenerator/ServiceGeneratorBase";
+import type { ServiceGeneratorBase } from "./ServiceGenerator/ServiceGeneratorBase";
 import { ServiceGenerator } from "./ServiceGenerator/ServiceGenerator";
-import { TypeGeneratorBase } from "./TypeGenerator/TypeGeneratorBase";
+import type { TypeGeneratorBase } from "./TypeGenerator/TypeGeneratorBase";
 import { TypeGenerator } from "./TypeGenerator/TypeGenerator";
 
 interface ParserConfig {
@@ -42,6 +42,7 @@ export class ApplicationInterfaceParser {
         const seen = new Set<Function>();
 
         while (modules.length > 0) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- length checked
             const module = modules.pop()!;
             if (seen.has(module)) {
                 continue;

@@ -1,5 +1,5 @@
 import { RequestMethod } from "@nestjs/common";
-import {
+import type {
     ServiceGeneratorBase,
     RequestMethodType,
     Service,
@@ -99,7 +99,7 @@ export class ServiceGenerator implements ServiceGeneratorBase {
 
     private joinPath(...paths: string[]) {
         const pathSegments = paths
-            .join("")
+            .join("/")
             .split("/")
             .filter((_) => _ !== "");
 

@@ -1,4 +1,5 @@
-import { RequestMethod } from "@nestjs/common";
+import type { RequestMethod } from "@nestjs/common";
+
 export type RequestMethodType = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "ALL" | "OPTIONS" | "HEAD";
 
 export interface ServiceMetadata {

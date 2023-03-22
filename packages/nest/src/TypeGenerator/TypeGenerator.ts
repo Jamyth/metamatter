@@ -1,5 +1,6 @@
-import { Definition, MetaMatter, removeDuplicateTypes } from "@metamatter/core";
-import { TypeGeneratorBase } from "./TypeGeneratorBase";
+import type { Definition } from "@metamatter/core";
+import { MetaMatter, removeDuplicateTypes } from "@metamatter/core";
+import type { TypeGeneratorBase } from "./TypeGeneratorBase";
 import { REQUEST_BODY_KEY } from "../decorators/RequestBody";
 import { RESPONSE_DATA_KEY } from "../decorators/ResponseData";
 
