@@ -143,6 +143,10 @@ describe("@Enum", () => {
     it('Create a definition of type "enum"', () => {
         assert.deepStrictEqual(definition.type, "enum");
     });
+
+    it("matches with the definition", () => {
+        assert.deepStrictEqual(definition.definition, '{ADMIN = "ADMIN",USER = "USER",}');
+    });
 });
 
 describe("MetaMatter", () => {

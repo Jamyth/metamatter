@@ -19,7 +19,7 @@ export class MetaMatter {
             .setIsArray(false)
             .setIsSubclass(false)
             .setIsNullable(false)
-            .setBody(propertyMap)
+            .setBody(isEnum ? object : propertyMap)
             .build();
     }
 
