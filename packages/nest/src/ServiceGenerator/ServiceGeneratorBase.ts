@@ -3,6 +3,7 @@ import type { RequestMethod } from "@nestjs/common";
 export type RequestMethodType = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "ALL" | "OPTIONS" | "HEAD";
 
 export interface ServiceMetadata {
+    name: string;
     method: RequestMethod;
     path: string | string[];
     isResponseArray: boolean;
@@ -11,6 +12,7 @@ export interface ServiceMetadata {
 }
 
 export interface ServiceFunctionInfo {
+    name: string;
     method: RequestMethodType;
     path: string;
     request: string | null;

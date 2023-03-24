@@ -1,4 +1,4 @@
-import { Get, Controller, Inject } from "@nestjs/common";
+import { Get, Controller, Inject, Query } from "@nestjs/common";
 import { ApplicationInterfaceParser } from "../ApplicationInterfaceParser";
 import { APP_MODULE_KEY, GLOBAL_PREFIX_KEY } from "./keys";
 
@@ -12,8 +12,11 @@ export class MetaMatterController {
     ) {}
 
     @Get("/api")
-    generateServiceAndTypeDefinition() {
-        const parser = new ApplicationInterfaceParser(this.appModule, { globalPrefix: this.globalPrefix });
+    generateServiceAndTypeDefinition(@Query("platform") platform: string) {
+        const parser = new ApplicationInterfaceParser(this.appModule, {
+            globalPrefix: this.globalPrefix,
+            platform: platform || undefined,
+        });
         return parser.generate();
     }
 }

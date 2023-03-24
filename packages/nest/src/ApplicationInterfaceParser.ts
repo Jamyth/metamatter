@@ -1,16 +1,14 @@
 import { MODULE_KEY } from "./decorators/Module";
 import { CONTROLLER_KEY } from "./decorators/Controller";
 import type { ServiceGeneratorBase } from "./ServiceGenerator/ServiceGeneratorBase";
+import type { ParserConfig } from "./ServiceGenerator/ServiceGenerator";
 import { ServiceGenerator } from "./ServiceGenerator/ServiceGenerator";
 import type { TypeGeneratorBase } from "./TypeGenerator/TypeGeneratorBase";
 import { TypeGenerator } from "./TypeGenerator/TypeGenerator";
 
-interface ParserConfig {
-    globalPrefix: string | undefined;
-}
-
 const defaultParserConfig: ParserConfig = {
     globalPrefix: undefined,
+    platform: undefined,
 };
 
 export class ApplicationInterfaceParser {
@@ -20,7 +18,7 @@ export class ApplicationInterfaceParser {
 
     constructor(mainModule: Function, private readonly parserConfig: ParserConfig = defaultParserConfig) {
         this.entryModule = mainModule;
-        this.serviceGenerator = new ServiceGenerator(parserConfig.globalPrefix);
+        this.serviceGenerator = new ServiceGenerator(parserConfig);
         this.typeGenerator = new TypeGenerator();
     }
 

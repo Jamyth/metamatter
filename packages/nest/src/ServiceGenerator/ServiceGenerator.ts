@@ -9,30 +9,46 @@ import type {
 import { REQUEST_BODY_KEY } from "../decorators/RequestBody";
 import { RESPONSE_DATA_KEY, RESPONSE_ARRAY_DATA_KEY } from "../decorators/ResponseData";
 import { ClassNameBuilder } from "../util/ClassNameBuilder";
+import { PLATFORM_KEY } from "../decorators/Platform";
 
 const METHOD_METADATA_KEY = "method";
 const PATH_METADATA_KEY = "path";
 
+export interface ParserConfig {
+    globalPrefix: string | undefined;
+    platform: string | undefined;
+}
+
 export class ServiceGenerator implements ServiceGeneratorBase {
     private globalPrefix: string;
+    private platform: string | null;
 
-    constructor(globalPrefix: string | undefined) {
+    constructor(config: ParserConfig) {
+        const { globalPrefix, platform } = config;
         this.globalPrefix = globalPrefix || "";
+        this.platform = platform ?? null;
     }
 
     generate(controllers: Function[]): Service[] {
-        return controllers.map((controller) => {
-            const controllerBasePath = Reflect.getMetadata(PATH_METADATA_KEY, controller);
-            const serviceFunctionInfos = this.extractFunctionKeys(controller)
-                .map((key) => this.extractFunctionMetadata(controller, key))
-                .filter((_): _ is ServiceMetadata => _ !== null)
-                .flatMap((metadata) => this.generateServiceFunctionInfo(metadata, controllerBasePath));
+        return controllers
+            .map((controller) => {
+                const controllerBasePath = Reflect.getMetadata(PATH_METADATA_KEY, controller);
 
-            return {
-                name: controller.name,
-                methods: serviceFunctionInfos,
-            };
-        });
+                const serviceFunctionInfos = this.extractFunctionKeys(controller)
+                    .map((key) => this.extractFunctionMetadata(controller, key))
+                    .filter((_): _ is ServiceMetadata => _ !== null)
+                    .flatMap((metadata) => this.generateServiceFunctionInfo(metadata, controllerBasePath));
+
+                if (!serviceFunctionInfos.length) {
+                    return null;
+                }
+
+                return {
+                    name: controller.name,
+                    methods: serviceFunctionInfos,
+                };
+            })
+            .filter((_): _ is Service => _ !== null);
     }
 
     private extractFunctionKeys(controller: Function) {
@@ -62,13 +78,18 @@ export class ServiceGenerator implements ServiceGeneratorBase {
         const requestPath: string | string[] = Reflect.getMetadata(PATH_METADATA_KEY, actualFn);
         const requestBody: Function | null = Reflect.getMetadata(REQUEST_BODY_KEY, actualFn) || null;
         const responseData: Function | null = Reflect.getMetadata(RESPONSE_DATA_KEY, actualFn) || null;
+        const classPlatformKeys: string[] = Reflect.getMetadata(PLATFORM_KEY, controller) || [];
+        const platformKeys: string[] = Reflect.getMetadata(PLATFORM_KEY, actualFn) || [];
         const isResponseArray: boolean = Reflect.getMetadata(RESPONSE_ARRAY_DATA_KEY, actualFn) || false;
 
-        if (requestMethod === null) {
+        const shouldSkip = this.platform !== null && ![...platformKeys, ...classPlatformKeys].includes(this.platform);
+
+        if (requestMethod === null || shouldSkip) {
             return null;
         }
 
         return {
+            name: functionKey,
             isResponseArray,
             method: requestMethod,
             path: requestPath,
@@ -89,6 +110,7 @@ export class ServiceGenerator implements ServiceGeneratorBase {
                 : null;
 
             return {
+                name: config.name,
                 path: this.joinPath(this.globalPrefix, controllerBasePath, path),
                 method: this.requestMapper(config.method),
                 request,
