@@ -3,8 +3,15 @@ import { MetaMatter, removeDuplicateTypes } from "@metamatter/core";
 import type { TypeGeneratorBase } from "./TypeGeneratorBase";
 import { REQUEST_BODY_KEY } from "../decorators/RequestBody";
 import { RESPONSE_DATA_KEY } from "../decorators/ResponseData";
+import { PLATFORM_KEY } from "../decorators/Platform";
 
 export class TypeGenerator implements TypeGeneratorBase {
+    private readonly platform: string | null;
+
+    constructor(platform: string | undefined) {
+        this.platform = platform ?? null;
+    }
+
     generate(controllers: Function[]): Definition[] {
         return removeDuplicateTypes(
             ...controllers.flatMap((controller) => {
@@ -41,8 +48,16 @@ export class TypeGenerator implements TypeGeneratorBase {
         }
 
         const actualFn = descriptor.value;
+        const classPlatformKeys: string[] = Reflect.getMetadata(PLATFORM_KEY, controller) || [];
+        const platformKeys: string[] = Reflect.getMetadata(PLATFORM_KEY, actualFn) || [];
         const requestBody: Function | null = Reflect.getMetadata(REQUEST_BODY_KEY, actualFn) || null;
         const responseData: Function | null = Reflect.getMetadata(RESPONSE_DATA_KEY, actualFn) || null;
+
+        const shouldSkip = this.platform !== null && ![...platformKeys, ...classPlatformKeys].includes(this.platform);
+
+        if (shouldSkip) {
+            return [];
+        }
 
         if (requestBody !== null) {
             nodes.push(requestBody);

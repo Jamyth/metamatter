@@ -19,7 +19,7 @@ export class ApplicationInterfaceParser {
     constructor(mainModule: Function, private readonly parserConfig: ParserConfig = defaultParserConfig) {
         this.entryModule = mainModule;
         this.serviceGenerator = new ServiceGenerator(parserConfig);
-        this.typeGenerator = new TypeGenerator();
+        this.typeGenerator = new TypeGenerator(parserConfig.platform);
     }
 
     generate() {
