@@ -59,6 +59,23 @@ describe("@Property", () => {
         assert.deepStrictEqual(nameListType.definition, expected);
     });
 
+    it("Custom Array types", () => {
+        @Subclass()
+        class Name {
+            @Property()
+            value: string;
+        }
+        class NameList {
+            @Property({ type: Name })
+            names: Name[];
+        }
+        const nameListType = MetaMatter.generateTypeDefinitions(NameList)[0];
+
+        const expected = "{names:NameList$Name[];}";
+
+        assert.deepStrictEqual(nameListType.definition, expected);
+    });
+
     it("Nullable Types", () => {
         class User {
             @Property({ nullable: true })

@@ -82,7 +82,7 @@ export function Property<Enum extends EnumType<Enum>>({
 
         let inferredType: Constructor = Reflect.getMetadata("design:type", target, key);
 
-        const { isArray, isEnum, isSubclass } = extractPropertyOfType(inferredType);
+        const { isArray } = extractPropertyOfType(inferredType);
 
         if (typeof inferredType === "undefined") {
             console.warn(`Type of ${serializedKey} is inferred as "undefined", make sure it is correct.`);
@@ -93,6 +93,8 @@ export function Property<Enum extends EnumType<Enum>>({
         if (type) {
             inferredType = type;
         }
+
+        const { isSubclass, isEnum } = extractPropertyOfType(inferredType);
 
         let body: Enum | null = null;
 
