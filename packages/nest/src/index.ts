@@ -5,3 +5,4 @@ export * from "./decorators/RequestBody";
 export * from "./decorators/ResponseData";
 export * from "./decorators/Platform";
 export * from "./module/MetaMatterModule";
+export type { Service, ServiceFunctionInfo, RequestMethodType } from "./ServiceGenerator/ServiceGeneratorBase";

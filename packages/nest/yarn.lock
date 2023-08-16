@@ -83,10 +83,10 @@
   resolved "https://registry.yarnpkg.com/@lukeed/csprng/-/csprng-1.0.1.tgz#625e93a0edb2c830e3c52ce2d67b9d53377c6a66"
   integrity sha512-uSvJdwQU5nK+Vdf6zxcWAY2A8r7uqe+gePwLWzJ+fsQehq18pc0I2hJKwypZ2aLM90+Er9u1xn4iLJPZ+xlL4g==
 
-"@metamatter/core@1.1.7":
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/@metamatter/core/-/core-1.1.7.tgz#25f72549d4b28a79c2105c69154ce661689b24d4"
-  integrity sha512-gkCB8+wkohqp+tNIzc/XAQTmW4NwN2fnzjMkgUX9tzrG2eNn89l+IhnIdPzV0CCcpN5jhUQS1950ZL9dGI1Ayg==
+"@metamatter/core@1.1.9":
+  version "1.1.9"
+  resolved "https://registry-npm.okg.com/@metamatter%2fcore/-/core-1.1.9.tgz#6282583e730af4c403a1224b593ec0aff9b798bd"
+  integrity sha512-JvyX0rvvzV6wcY/gGkCAdhAHzVDdosxG1ExllRiT89NXNP/+gzvA3aL+idu7BRyY0uPDEQJy8Jj2u7OC8M7Ysg==
   dependencies:
     reflect-metadata "0.1.13"
 

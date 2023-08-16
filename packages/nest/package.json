@@ -1,6 +1,6 @@
 {
     "name": "@metamatter/nest",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "main": "dist/index.js",
     "license": "MIT",
     "scripts": {
@@ -15,7 +15,7 @@
         "dist/**"
     ],
     "peer-dependencies": {
-        "@metamatter/core": "^1.1.7",
+        "@metamatter/core": "^1.1.9",
         "@nestjs/common": "^9.3.10"
     },
     "repository": {
@@ -39,7 +39,7 @@
         "type definition"
     ],
     "devDependencies": {
-        "@metamatter/core": "1.1.7",
+        "@metamatter/core": "1.1.9",
         "@nestjs/common": "9.3.10",
         "eslint": "8.36.0",
         "mocha": "10.2.0",
