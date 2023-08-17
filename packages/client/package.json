@@ -7,16 +7,20 @@
         "run-script": "ts-node --project config/tsconfig.script.json",
         "format": "yarn run-script script/format.ts",
         "lint": "yarn run-script script/lint.ts",
+        "dev": "ts-node --project config/tsconfig.src.json src/index.ts",
         "build": "yarn run-script script/build.ts",
         "test": "TS_NODE_PROJECT='./config/tsconfig.test.json' mocha --require ts-node/register ./test/**/*.test.ts"
     },
     "files": [
         "dist/**"
     ],
+    "peer-dependencies": {
+        "@metamatter/core": "^1.1.9"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/Jamyth/metamatter",
-        "directory": "packages/core"
+        "directory": "packages/client"
     },
     "contributors": [
         {
@@ -34,10 +38,18 @@
         "type gen"
     ],
     "devDependencies": {
+        "@metamatter/core": "1.1.9",
         "eslint": "8.36.0",
         "mocha": "10.2.0",
         "prettier": "2.8.4",
         "ts-node": "10.9.1",
         "typescript": "5.0.2"
+    },
+    "optionalDependencies": {
+        "@metamatter/nest": "1.1.2"
+    },
+    "dependencies": {
+        "@iamyth/devtool-utils": "1.0.1",
+        "@iamyth/logger": "1.0.6"
     }
 }
